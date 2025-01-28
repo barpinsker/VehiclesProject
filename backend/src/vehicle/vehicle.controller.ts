@@ -10,16 +10,18 @@ constructor(private readonly vehicleService: VehicleService){
 // Get all vehicles with and without conditions, without creating a GET request
 @Get()
 getAllCars(@Query('active')  status: string ) {
-     console.log(status==='false'?false:true)
      if(status){
-     return this.vehicleService.getAllCarsByStatus(status==='false'?false:true);}
+     return this.vehicleService.getAllCarsByStatus(status);}
   else{
      return this.vehicleService.getAllCars()
   }
 }
+getSpecificCars(@Query('id')  id: string ) {
+     return this.vehicleService.getSpecificCars(id)
+}
 // Creating a POST request to add a new vehicle
 @Post('create')  
-createCar(@Body() data:{name:string}){
+createCar(@Body() data:{id: string,licensePlate: string,manufacturer: string,model: string,status: string,createdAt: string}){
      return this.vehicleService.createCar(data)
 }
 // Creating a PUT request to update an existing vehicle

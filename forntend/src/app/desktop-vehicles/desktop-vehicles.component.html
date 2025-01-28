@@ -1,0 +1,95 @@
+
+<div class="modal fade" id="addNewCarModel" aria-hidden="true" aria-labelledby="addNewCarModel" tabindex="-1">
+     <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalToggleLabel">New Car</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="direction: rtl;">
+               <div class="contaienr-ipnuts">
+                   <ng-container *ngFor="let header of headerInputsModel">
+                    <div style="flex: 25% 1;" class="field" >
+                         <select *ngIf="header.type=='select'" class="form-select"  [(ngModel)]="newCar[header.nameEnglish]">
+                              <option selected disabled>{{header.nameHebraw}}</option>
+                              <option *ngFor="let value of header.valuesSelect" value="{{value}}">{{value}}</option>
+                         </select>
+                         <input *ngIf="header.type=='text' || header.type=='date'" class="form-control" type="{{header.type}}"
+                            id="{{header.nameEnglish}}" required autocomplete="off" [(ngModel)]="newCar[header.nameEnglish]">
+                         <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
+                            data-title=""></label>
+                      </div>
+                   </ng-container>
+               </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-bs-target="#addNewCarModel" data-bs-toggle="modal" (click)="createNewCar()">Add</button>
+            </div>
+          </div>
+        </div>
+</div>
+
+
+<div class="modal fade" id="EditCarModel" aria-hidden="true" aria-labelledby="addNewCarModel" tabindex="-1">
+     <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalToggleLabel">New Car</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="direction: rtl;">
+               <div class="contaienr-ipnuts">
+                   <ng-container *ngFor="let header of headerInputsModel">
+                    <div style="flex: 25% 1;" class="field" >
+                         <select *ngIf="header.type=='select'" class="form-select"  [(ngModel)]="editRowCar[header.nameEnglish]">
+                              <option selected disabled>{{header.nameHebraw}}</option>
+                              <option *ngFor="let value of header.valuesSelect" value="{{value}}">{{value}}</option>
+                         </select>
+                         <input *ngIf="header.type=='text' || header.type=='date'" class="form-control" type="{{header.type}}"
+                            id="{{header.nameEnglish}}" required autocomplete="off" [(ngModel)]="editRowCar[header.nameEnglish]">
+                         <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
+                            data-title=""></label>
+                      </div>
+                   </ng-container>
+               </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-bs-target="#addNewCarModel" data-bs-toggle="modal" (click)="createNewCar()">Add</button>
+            </div>
+          </div>
+        </div>
+</div>
+
+
+<div class="cotnaienr-page">
+     <div class="container">
+     <div class="container-buttons">
+          <button mat-raised-button  data-bs-target="#addNewCarModel" data-bs-toggle="modal">
+               <div style="display: flex;gap: 0px;flex-direction: column;" >
+                    <span class="material-symbols-outlined">
+                         add
+                    </span>
+                    <span>Add new car</span>
+               </div>
+          </button>
+          <button mat-raised-button></button>
+     </div>
+     <div class="cotnainer-table">
+          <table>
+               <thead>
+                    <th *ngFor="let header of headers">{{header.nameHebraw}}</th>
+               </thead>
+               <tbody>
+                    <ng-container *ngFor="let car of carList">
+                         <tr>
+                              <ng-container *ngFor="let header of headers">
+                              <td *ngIf="header.nameEnglish!='actions'">{{car[header.nameEnglish]}}</td>
+                              <td *ngIf="header.nameEnglish=='actions'"  data-bs-target="#EditCarModel" data-bs-toggle="modal" (click)="getSpecificCar(car['id'])"><button>edit</button></td>
+                              </ng-container>
+                         </tr>
+                    </ng-container>
+               </tbody>
+          </table>
+     </div>
+</div>
+</div>
