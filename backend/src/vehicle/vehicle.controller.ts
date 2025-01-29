@@ -12,6 +12,7 @@ import {
 import { VehicleService } from './vehicle.service';
 import { query } from 'express';
 
+
 @Controller('vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
@@ -32,7 +33,7 @@ export class VehicleController {
   }
   //  Creating a GET request to spacific car
   @Get(':id')
-  getSpecificCars(@Param('id') id: string) {
+  getSpecificCars(@Param('id') id: number) {
     return this.vehicleService.getSpecificCars(id);
   }
 
@@ -54,10 +55,10 @@ export class VehicleController {
   // Creating a PUT request to update an existing vehicle
   @Put(':id')
   updateVehicle(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body()
     body: {
-      id: string;
+      id: number;
       licensePlate: string;
       manufacturer: string;
       model: string;
