@@ -23,11 +23,11 @@ export class Headers {
       nameEnglish: 'model',
       type: 'select',
       valuesSelect: {
-        Seat: ['ibiza', 'arona'],
+        Seat: ['Ibiza', 'Arona'],
         Honda: ['Civic'],
-        Toyoya: ['Corolla'],
-        Ford: ['mostang', 'GT'],
-        Ferrari: ['ferari'],
+        Toyota: ['Corolla'],
+        Ford: ['Mostang', 'GT'],
+        Ferrari: ['Ferrari'],
       },
     },
     {
@@ -36,6 +36,6 @@ export class Headers {
       type: 'select',
       valuesSelect: ['active', 'inactive'],
     },
-    { nameHebraw: 'תאריך יצירה', nameEnglish: 'createdAt', type: 'date' },
+    // { nameHebraw: 'תאריך יצירה', nameEnglish: 'createdAt', type: 'date' },
   ];
 }

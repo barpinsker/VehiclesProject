@@ -21,7 +21,7 @@ export class DesktopVehiclesComponent implements OnInit {
   editRowCar: any = {};
   indexFilterActive: number = 0;
   statusCarFilter = [
-    { name: 'all', value: '', active: true },
+    { name: 'all', value: 'empty', active: true },
     { name: 'active', value: 'active', active: false },
     { name: 'inactive', value: 'inactive', active: false },
   ];
@@ -31,21 +31,20 @@ export class DesktopVehiclesComponent implements OnInit {
     for(let header of this.headerInputsModel){
       jsonValidaitor[header.nameEnglish]=['', Validators.required]
       this.newCar[header.nameEnglish]=''
+      this.editRowCar[header.nameEnglish]=''
     }
-    this.getAllCars('');
+    this.getAllCars('empty');
     
   }
   isFormValid(): boolean {
-    return this.newCar.licensePlate !== '' && this.newCar.manufacturer !== '' && this.newCar.model !== '' && this.newCar.status !== '' && this.newCar.createdAt!=='';
+    return (this.newCar.licensePlate !== ''||this.editRowCar.licensePlate !== '') && (this.newCar.manufacturer !== ''||this.editRowCar.manufacturer !== '') && (this.newCar.model !== ''||this.editRowCar.model !== '') && (this.newCar.status !== ''||this.editRowCar.status !== '');
   }
   getAllCars(status: string) {
     this.restApi.getAllCars(`${status}`).subscribe(
       (response) => {
+        console.log(response)
         this.carList = [...response];
-        for(let i of this.carList){
-         i['updatedAt']=formatDate(i['updatedAt'],'dd-MM-yyyy','en')
-         i['createdAt']=formatDate(i['createdAt'],'dd-MM-yyyy','en')
-                }
+       
       },
       (error) => {
         console.log('not found cars in a list');
@@ -60,22 +59,7 @@ export class DesktopVehiclesComponent implements OnInit {
       this.indexFilterActive = indexRow;
     }
   }
-  transform(value: string, flagType: string): void {
-    let numbers: any = value.replace(/\D/g, ''); // שומר רק מספרים
-    if (numbers.length > 3) {
-      numbers =
-        numbers.slice(0, 3) +
-        '-' +
-        numbers.slice(3, 5) +
-        '-' +
-        numbers.slice(5, 10);
-    }
-    if (flagType == 'new') {
-      this.newCar['licensePlate'] = numbers;
-    } else if (flagType == 'old') {
-      this.editRowCar['licensePlate'] = numbers;
-    }
-  }
+
   getNewId() {
     this.restApi.getNewId().subscribe((data) => {
       this.newCar['id'] = data;
@@ -88,11 +72,11 @@ export class DesktopVehiclesComponent implements OnInit {
     });
   }
   createNewCar() {
-    this.newCar.id=Number(this.newCar.id)
-    this.newCar.updatedAt = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-    this.restApi.createNewCar(this.newCar).subscribe(
+    this.newCar.createdAt = formatDate(new Date(), 'dd-MM-yyyy', 'en');
+    this.newCar.updatedAt = formatDate(new Date(), 'dd-MM-yyyy', 'en');
+    this.restApi.createNewCar({data:this.newCar}).subscribe(
       (response:any) => {
-        this.carList.push(this.newCar);
+        this.carList.push(response.data);
         this.newCar = {};
         this.toastr.success(response.message,"Create Car")
       },
@@ -103,12 +87,12 @@ export class DesktopVehiclesComponent implements OnInit {
     );
   }
   updateCar(id: number) {
+    this.editRowCar.updatedAt = formatDate(new Date(), 'dd-MM-yyyy', 'en');
     this.restApi.updateCar(`${id}`, this.editRowCar).subscribe(
       (response) => {
         this.carList[this.carList.findIndex((car) => car.id === id)] =
           this.editRowCar;
-        this.carList[this.carList.findIndex((car) => car.id === id)].updatedAt =
-          formatDate(new Date(), 'yyyy-MM-dd', 'en');
+      
         this.toastr.success(response.message,"Update Car")
       },
       (error) => {

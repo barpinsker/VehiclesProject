@@ -8,7 +8,7 @@ export const dataSource = new DataSource({
   port: 5432,
   username: "postgres",
   password: "1234",
-  database: "vehicleBD",
+  database: "vehicleDB",
   entities: [Vehicle],
   migrations: ["src/db/migrations/*.ts"],
   synchronize: true,
