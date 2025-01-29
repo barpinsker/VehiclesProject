@@ -3,7 +3,7 @@
      <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
                <div class="modal-header">
-                    <h1 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">New Car</h1>
+                    <h2 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">New Car</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div class="modal-body" style="direction: rtl;">
@@ -43,7 +43,7 @@
                     </div>
                </div>
                <div class="modal-footer">
-                    <button mat-raised-button class="button-design" data-bs-target="#addNewCarModel"
+                    <button mat-raised-button [disabled]="!isFormValid()" class="button-design" data-bs-target="#addNewCarModel"
                          data-bs-toggle="modal" (click)="createNewCar()">Add</button>
                </div>
           </div>
@@ -55,7 +55,7 @@
      <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
                <div class="modal-header">
-                    <h1 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">Edit Car</h1>
+                    <h2 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">Edit Car</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div class="modal-body" style="direction: rtl;">
@@ -86,7 +86,7 @@
                     </div>
                </div>
                <div class="modal-footer">
-                    <button class="button-design" mat-raised-button data-bs-target="#EditCarModel"
+                    <button class="button-design" [disabled]="!isFormValid()" mat-raised-button data-bs-target="#EditCarModel"
                          data-bs-toggle="modal" (click)="updateCar(editRowCar['id'])">Save</button>
                </div>
           </div>

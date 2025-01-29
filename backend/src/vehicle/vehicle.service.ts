@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { format } from 'date-fns';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { Vehicle } from 'src/vehicle.entity';
+import { validate } from 'class-validator';
 // import { Repository } from 'typeorm';
 // import { user } from 'src/user/entities/user.entity';
 @Injectable()
@@ -45,12 +46,10 @@ export class VehicleService {
     // return this.cars;
     return this.vehicleRepository.find();
   }
-  async getSpecificCars(id: number) {
-    const vehicle = await this.vehicleRepository.findOne({ where: { id } });
-    if (!vehicle) {
-      throw new Error(`Vehicle with ID ${id} not found`);
-    }
-    return vehicle;
+  async getSpecificCars(id: any) {
+    const vehicle =await this.vehicleRepository.findOne({ where: { id } });
+    return vehicle
+ 
   }
   async getNewId(): Promise<any> {
     const listCar=await this.vehicleRepository.find()
@@ -64,24 +63,25 @@ export class VehicleService {
   }
   // Adding a new vehicle
   async createCar(car: any) {
-    car.updatedAt = new Date();
-    const newCar = this.vehicleRepository.create({
-      licensePlate: car.licensePlate,
-      manufacturer: car.manufacturer,
-      model: car.model,
-      status: car.status,
-      createdAt: car.createdAt,
-      updatedAt: car.updatedAt,
-    })
-    return await this.vehicleRepository.save(newCar)
+    
+            // הנתונים תקינים
+            car.updatedAt = new Date();
+            const newCar = this.vehicleRepository.create({
+            licensePlate: car.licensePlate,
+            manufacturer: car.manufacturer,
+            model: car.model,
+            status: car.status,
+            createdAt: car.createdAt,
+            updatedAt: car.updatedAt,
+            })
+            return await this.vehicleRepository.save(newCar)
+    
 }
   // Update an existing vehicle, and if it doesn't exist, throw an error
   async updateCar(car: any, id: number) {
+   
     car.updatedAt = new Date();
     const vehicle = await this.vehicleRepository.findOne({ where: { id } });
-    if (!vehicle) {
-      throw new NotFoundException(`Vehicle with ID ${id} not found`);
-    }
      // udpate data
      Object.assign(vehicle, car);
 
@@ -90,14 +90,14 @@ export class VehicleService {
    
   }
   // Delete an existing vehicle only if its ID exists
- async removeCar(id: string) {
-    const indexRow = this.cars.findIndex((car) => car.id === id);
-    if (indexRow == -1) {
-      return `The id ${id} is not a found`;
-    } else {
-      this.cars.splice(indexRow, 1);
-      this.vehicleRepository.delete(id);
-      return this.cars;
-    }
+ async removeCar(id: number):Promise<boolean> {
+  const result = await this.vehicleRepository.delete(id);  // פה אתה פשוט מבצע את הפעולה של TypeORM
+
+  if (result.affected === 0) {
+    // אם לא הוסרו שורות, הרכב לא נמצא
+    return false;
+  }
+
+  return true;
   }
 }
