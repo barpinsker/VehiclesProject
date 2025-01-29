@@ -4,10 +4,10 @@
 
 This project is built using the following technologies:
 
-- **Node.js**: Version `20.12.2v`  
-- **NestJS**: Version `10.x`  
-- **Angular**: Version `16.x`  
-- **PostgreSQL**: Version `15.x`  
+- **Node.js**: Version `22.13.1`  
+- **NestJS**: Version `11.0.2`  
+- **Angular**: Version `16.2.16`  
+- **PostgreSQL**: Version `17`  
 
 ## System Requirements
 Before running the project, ensure your system meets the following requirements:
@@ -27,7 +27,21 @@ To get started, make sure to:
 2. Install PostgreSQL and set up the database as per the project requirements.
 3. Clone the repository and follow the development setup guide (provided below).
 
-## Additional Notes
+## After performing the clone
+Follow the steps below:
+1. cd backend
+2. npm i -g @nestjs/cli
+3. npm install
+4. npm run build
+5. ngx typeorm migration:generate -d dist/data-source.js srtc/migrations/newMigration - for migrations
 
-- Ensure that you use the specified versions of each technology to avoid compatibility issues.
-- For Docker setup, please refer to the `docker-compose.yml` file or the Docker section in this document (if applicable).
+6. cd forntend
+7. npm install -g @angular/cli
+8. npm install
+
+**after setp** 
+run backend - " npm run start:dev
+run frontend - npm start
+
+## Additional Notes
+Unfortunately, I encountered an error where the database could not be connected to via Docker, so the Docker setup is not available.
