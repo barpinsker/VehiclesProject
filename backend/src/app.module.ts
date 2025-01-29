@@ -6,13 +6,13 @@ import { VehicleModule } from './vehicle/vehicle.module';
 import { VehicleController } from './vehicle/vehicle.controller';
 import { VehicleTable } from './vehicle/vehicle.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { dataSource } from './data-source';
 // import { AppDataSource } from '../data-soruce';
-import { UserModule } from './user/user.module';
-import { dataSourceOptions } from 'db/data-soruce';
+
 
 
 @Module({
-  imports: [VehicleModule ,TypeOrmModule.forRoot(dataSourceOptions),UserModule],
+  imports: [VehicleModule ,TypeOrmModule.forRoot(dataSource.options),],
   controllers: [AppController],
   providers: [AppService],
 })

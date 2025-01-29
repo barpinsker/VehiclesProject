@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { format } from 'date-fns';
 import { InjectRepository } from '@nestjs/typeorm';
-import { user } from 'src/user/entities/user.entity';
+
 import { Repository } from 'typeorm';
+import { Vehicle } from 'src/vehicle.entity';
 // import { Repository } from 'typeorm';
 // import { user } from 'src/user/entities/user.entity';
 @Injectable()
 export class VehicleService {
-  constructor(@InjectRepository(user)
-  private vehicleRepository: Repository<user>){}
+  constructor(@InjectRepository(Vehicle)
+  private vehicleRepository: Repository<Vehicle>){}
   private readonly cars = [
     {
       id: '1',
