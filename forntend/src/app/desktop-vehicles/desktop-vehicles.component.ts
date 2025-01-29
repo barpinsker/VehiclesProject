@@ -4,6 +4,7 @@ import { RestApiService } from '../service/rest-api.service';
 import { Pipe, PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-desktop-vehicles',
   templateUrl: './desktop-vehicles.component.html',
@@ -11,12 +12,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   standalone: false,
 })
 export class DesktopVehiclesComponent implements OnInit {
-  constructor(private restApi: RestApiService,private fb: FormBuilder) {}
+  constructor(private restApi: RestApiService,private toastr:ToastrService) {}
   carList: any[] = [];
   headers: any = new Headers().headerTable;
   headerInputsModel: any = new Headers().headerInputs;
   newCar: any = {};
-  myForm: FormGroup|any;
+
   editRowCar: any = {};
   indexFilterActive: number = 0;
   statusCarFilter = [
@@ -31,19 +32,16 @@ export class DesktopVehiclesComponent implements OnInit {
       jsonValidaitor[header.nameEnglish]=['', Validators.required]
       this.newCar[header.nameEnglish]=''
     }
-    this.myForm = this.fb.group({
-      jsonValidaitor
-    });
     this.getAllCars('');
     
   }
   isFormValid(): boolean {
-    return this.newCar.licensePlate !== '' && this.newCar.manufacturer !== '' && this.newCar.model.trim() !== '' && this.newCar.status.trim() !== '' && this.newCar.createdAt.trim()!=='';
+    return this.newCar.licensePlate !== '' && this.newCar.manufacturer !== '' && this.newCar.model !== '' && this.newCar.status !== '' && this.newCar.createdAt!=='';
   }
   getAllCars(status: string) {
     this.restApi.getAllCars(`${status}`).subscribe(
-      (data) => {
-        this.carList = [...data];
+      (response) => {
+        this.carList = [...response];
         for(let i of this.carList){
          i['updatedAt']=formatDate(i['updatedAt'],'dd-MM-yyyy','en')
          i['createdAt']=formatDate(i['createdAt'],'dd-MM-yyyy','en')
@@ -84,46 +82,53 @@ export class DesktopVehiclesComponent implements OnInit {
     });
   }
   getSpecificCar(id: string) {
-    this.restApi.getSpecificCar(`${id}`).subscribe((data) => {
-      this.editRowCar = data;
+    this.restApi.getSpecificCar(`${id}`).subscribe((response) => {
+      console.log(response)
+      this.editRowCar = response.data;
     });
   }
   createNewCar() {
+    this.newCar.id=Number(this.newCar.id)
     this.newCar.updatedAt = formatDate(new Date(), 'yyyy-MM-dd', 'en');
     this.restApi.createNewCar(this.newCar).subscribe(
-      (data) => {
+      (response:any) => {
         this.carList.push(this.newCar);
         this.newCar = {};
+        this.toastr.success(response.message,"Create Car")
       },
       (error) => {
-        console.log('לא ניתן להוסיף מכונית חדשה');
+        console.log(error)
+        this.toastr.error(error.error.message,"Create Car")
       }
     );
   }
-  updateCar(id: string) {
+  updateCar(id: number) {
     this.restApi.updateCar(`${id}`, this.editRowCar).subscribe(
-      (data) => {
+      (response) => {
         this.carList[this.carList.findIndex((car) => car.id === id)] =
           this.editRowCar;
         this.carList[this.carList.findIndex((car) => car.id === id)].updatedAt =
           formatDate(new Date(), 'yyyy-MM-dd', 'en');
+        this.toastr.success(response.message,"Update Car")
       },
       (error) => {
-        console.log('לא ניתן לעדכן שורה זאת');
+        this.toastr.error(error.error.message,"Update Car")
+       
       }
     );
   }
   removeCar(id: string) {
     this.restApi.deleteCar(`${id}`).subscribe(
-      (data) => {
-        console.log('seccsess for delete car');
+      (response) => {
         const indexCarRemove = this.carList.findIndex((car) => car.id === id);
         if (indexCarRemove !== -1) {
           this.carList.splice(indexCarRemove, 1);
         }
+        this.toastr.success(response.message,"Remove car")
       },
+      
       (error) => {
-        console.log('לא ניתן למחוק רכב זה');
+        this.toastr.success(error.error.message,"Remove car")
       }
     );
   }

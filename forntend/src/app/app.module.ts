@@ -9,6 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+
+import { provideToastr } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [AppComponent, DesktopVehiclesComponent],
   imports: [
@@ -20,8 +23,17 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     FormsModule,
     MatIconModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
-  providers: [],
+  providers: [provideToastr({
+    timeOut: 3000,
+    positionClass: 'toast-bottom-right',
+    preventDuplicates: true,
+  })],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
