@@ -39,9 +39,9 @@ Follow the steps below:
 7. npm install -g @angular/cli
 8. npm install
 
-**after setp** 
-run backend - " npm run start:dev
-run frontend - npm start
+**after setup** 
+- run backend - " npm run start:dev" 
+- run frontend - npm start
 
 ## Additional Notes
 Unfortunately, I encountered an error where the database could not be connected to via Docker, so the Docker setup is not available.
