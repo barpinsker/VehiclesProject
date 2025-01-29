@@ -11,7 +11,7 @@ export class RestApiService {
 
   getAllCars(statusCar: string): Observable<any[]> {
     return this.http.get<any>(
-      `${this.apiUrl}/data/allcars?active=${statusCar}`
+      `${this.apiUrl}/data/allcars?status=${statusCar}`
     );
   }
   getSpecificCar(id: string): Observable<any> {
