@@ -45,3 +45,4 @@ Follow the steps below:
 
 ## Additional Notes
 Unfortunately, I encountered an error where the database could not be connected to via Docker, so the Docker setup is not available.
+swagger ip - "localhost:3000/api"
