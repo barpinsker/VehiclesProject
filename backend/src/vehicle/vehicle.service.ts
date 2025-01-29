@@ -1,7 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { format } from 'date-fns';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { Repository } from 'typeorm';
+import { Vehicle } from 'src/vehicle.entity';
+// import { Repository } from 'typeorm';
+// import { user } from 'src/user/entities/user.entity';
 @Injectable()
 export class VehicleService {
+  constructor(@InjectRepository(Vehicle)
+  private vehicleRepository: Repository<Vehicle>){}
   private readonly cars = [
     {
       id: '1',
@@ -34,64 +42,61 @@ export class VehicleService {
   detailsCarUpdate: any = ['licensePlate', 'manufacturer', 'model', 'status'];
   // Request all vehicles without the need for a filter
   getAllCars() {
-    return this.cars;
+    // return this.cars;
+    return this.vehicleRepository.find();
   }
-  getSpecificCars(id: string) {
-    const car = this.cars.find((car) => car.id === id);
-    if (!car) {
-      throw new NotFoundException(`Item with id ${id} not found`);
+  async getSpecificCars(id: number) {
+    const vehicle = await this.vehicleRepository.findOne({ where: { id } });
+    if (!vehicle) {
+      throw new Error(`Vehicle with ID ${id} not found`);
     }
-    return car;
+    return vehicle;
   }
-  getNewId() {
-    return (this.cars.length + 1).toString();
+  async getNewId(): Promise<any> {
+    const listCar=await this.vehicleRepository.find()
+    return (listCar.length+1);
   }
 
   // Request all vehicles based on their status
-  getAllCarsByStatus(status: string) {
-    const carsActive = [];
-    this.cars.map((car: any) => {
-      if (car.status === status) {
-        carsActive.push(car);
-      }
-    });
-    return carsActive;
+  async getAllCarsByStatus(status: string): Promise<any> {
+    const vehicle = await this.vehicleRepository.find({ where: { status } });
+    return vehicle
   }
   // Adding a new vehicle
-  createCar(car: any) {
-    //  "id": (this.cars.length+1).toString(),"licensePlate": "345-67-890","manufacturer": "Ford","model": "Mustang","status": "active","createdAt": "2023-03-01T09:00:00Z","updatedAt": "2023-03-15T12:45:00Z"
-    car.updatedAt = format(new Date(), 'yyyy-MM-dd');
-    this.cars.push({
-      id: (this.cars.length + 1).toString(),
+  async createCar(car: any) {
+    car.updatedAt = new Date();
+    const newCar = this.vehicleRepository.create({
       licensePlate: car.licensePlate,
       manufacturer: car.manufacturer,
       model: car.model,
       status: car.status,
       createdAt: car.createdAt,
       updatedAt: car.updatedAt,
-    });
-    return this.cars;
-  }
+    })
+    return await this.vehicleRepository.save(newCar)
+}
   // Update an existing vehicle, and if it doesn't exist, throw an error
-  updateCar(car: any, id: string) {
-    const indexCar = this.cars.findIndex((car) => car.id === id);
-    if (indexCar == -1) {
-      return `The id ${id} is not a found`;
-    } else {
-      for (let header of this.detailsCarUpdate) {
-        this.cars[indexCar][header] = car[header];
-      }
-      this.cars[indexCar].updatedAt = format(new Date(), 'yyyy-MM-dd');
-      return this.cars;
+  async updateCar(car: any, id: number) {
+    car.updatedAt = new Date();
+    const vehicle = await this.vehicleRepository.findOne({ where: { id } });
+    if (!vehicle) {
+      throw new NotFoundException(`Vehicle with ID ${id} not found`);
     }
+     // udpate data
+     Object.assign(vehicle, car);
+
+     // Save data
+     return this.vehicleRepository.save(vehicle);
+   
   }
   // Delete an existing vehicle only if its ID exists
-  removeCar(id: string) {
+ async removeCar(id: string) {
     const indexRow = this.cars.findIndex((car) => car.id === id);
     if (indexRow == -1) {
       return `The id ${id} is not a found`;
     } else {
       this.cars.splice(indexRow, 1);
+      this.vehicleRepository.delete(id);
       return this.cars;
     }
   }
