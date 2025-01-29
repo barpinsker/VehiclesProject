@@ -33,7 +33,7 @@ Follow the steps below:
 2. npm i -g @nestjs/cli
 3. npm install
 4. npm run build
-5. npx typeorm migration:generate -d dist/data-source.js srtc/migrations/newMigration - for migrations
+5. npx typeorm migration:generate -d dist/data-source.js srtc/migrations/newMigration
 
 6. cd forntend
 7. npm install -g @angular/cli
