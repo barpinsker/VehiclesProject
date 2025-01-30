@@ -1,1 +1,174 @@
-<router-outlet></router-outlet>
+<!-- Model add New Car -->
+<div class="modal fade" id="addNewCarModel" aria-hidden="true" aria-labelledby="addNewCarModel" tabindex="-1">
+     <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+               <div class="modal-header">
+                    <h2 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">New Car</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body" style="direction: rtl;">
+                    <div class="contaienr-ipnuts">
+                         <ng-container *ngFor="let header of headerInputsModel">
+                              <div style="flex: 25% 1;" class="field">
+                                   <select *ngIf="header.type=='select'" class="form-select"
+                                        [(ngModel)]="newCar[header.nameEnglish]">
+                                        <option selected disabled>{{header.nameHebraw}}</option>
+                                        <ng-container *ngIf="header.nameEnglish!='model'">
+                                             <option *ngFor="let value of header.valuesSelect" value="{{value}}">
+                                                  {{value}}</option>
+                                        </ng-container>
+                                        <ng-container *ngIf="header.nameEnglish=='model'">
+                                             <option
+                                                  *ngFor="let value of header.valuesSelect[newCar['manufacturer']]|keyvalue"
+                                                  value="{{value.value}}">{{value.value}}</option>
+                                        </ng-container>
+
+                                   </select>
+                                   <ng-container *ngIf="header.type=='text' || header.type=='date'">
+                                        <input [disabled]="header.nameEnglish=='id'"
+                                             *ngIf="header.nameEnglish!='licensePlate'" class="form-control"
+                                             type="{{header.type}}" id="{{header.nameEnglish}}" required
+                                             autocomplete="off" [(ngModel)]="newCar[header.nameEnglish]">
+
+                                        <input [disabled]="header.nameEnglish=='id'" maxlength="8"
+                                             *ngIf="header.nameEnglish=='licensePlate'" class="form-control" type="text"
+                                             id="{{header.nameEnglish}}" required autocomplete="off"
+                                            
+                                             [(ngModel)]="newCar[header.nameEnglish]">
+                                   </ng-container>
+                                   <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
+                                        data-title=""></label>
+                              </div>
+                         </ng-container>
+                    </div>
+               </div>
+               <div class="modal-footer">
+                    <button mat-raised-button [disabled]="!isFormValid()" class="button-design" data-bs-target="#addNewCarModel"
+                         data-bs-toggle="modal" (click)="createNewCar()">Add</button>
+               </div>
+          </div>
+     </div>
+</div>
+
+<!-- model Edit Car -->
+<div class="modal fade" id="EditCarModel" aria-hidden="true" aria-labelledby="addNewCarModel" tabindex="-1">
+     <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+               <div class="modal-header">
+                    <h2 class="modal-title fs-5" style="margin-bottom: 0px;" id="exampleModalToggleLabel">Edit Car</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body" style="direction: rtl;">
+                    <div class="contaienr-ipnuts">
+                         <ng-container *ngFor="let header of headerInputsModel">
+                              <div style="flex: 25% 1;" class="field" *ngIf="header.type!='date'">
+                                   <select *ngIf="header.type=='select'" class="form-select"
+                                        [(ngModel)]="editRowCar[header.nameEnglish]">
+                                        <option selected disabled>{{header.nameHebraw}}</option>
+                                        <ng-container *ngIf="header.nameEnglish!='model'">
+                                             <option *ngFor="let value of header.valuesSelect" value="{{value}}">
+                                                  {{value}}</option>
+                                        </ng-container>
+                                        <ng-container *ngIf="header.nameEnglish=='model'">
+                                             <option
+                                                  *ngFor="let value of header.valuesSelect[editRowCar['manufacturer']]|keyvalue"
+                                                  value="{{value.value}}">{{value.value}}</option>
+                                        </ng-container>
+                                   </select>
+                                   <input [disabled]="header.nameEnglish=='id'" maxlength="8" *ngIf="header.type=='text'"
+                                        class="form-control" type="{{header.type}}" id="{{header.nameEnglish}}" required
+                                        autocomplete="off" [(ngModel)]="editRowCar[header.nameEnglish]"
+                                      >
+                                   <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
+                                        data-title=""></label>
+                              </div>
+                         </ng-container>
+                    </div>
+               </div>
+               <div class="modal-footer">
+                    <button class="button-design" [disabled]="!isFormValid()" mat-raised-button data-bs-target="#EditCarModel"
+                         data-bs-toggle="modal" (click)="updateCar(editRowCar['id'])">Save</button>
+               </div>
+          </div>
+     </div>
+</div>
+
+
+
+
+<div class="cotnaienr-page">
+     <div class="toolbar">
+          <h1 style="margin-bottom: 0;">Fleet of vehicles</h1>
+     </div>
+     <div class="container">
+          <div class="container-buttons">
+               <button mat-raised-button data-bs-target="#addNewCarModel" data-bs-toggle="modal" >
+                    <div style="display: flex;gap: 0px;flex-direction: column;">
+                         <span class="material-symbols-outlined">
+                              add
+                         </span>
+                         <span>Add new car</span>
+                    </div>
+               </button>
+               <div class="dropdown">
+                    <button mat-raised-button
+                         [class]="statusCarFilter[indexFilterActive].name!='all'?'activeFilter dropdown-toggle':'dropdown-toggle'"
+                         type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                         style="color: black;display: flex;gap: 5px;flex-direction: row;">
+
+                         <span style="font-size: 1.1rem">status Filter:
+                              <span><u>{{statusCarFilter[indexFilterActive].name}}</u></span></span>
+                    </button>
+                    <ul class="dropdown-menu">
+
+                         <li *ngFor="let status of statusCarFilter;index as i"><a style="cursor: pointer;"
+                                   [class]="statusCarFilter[i].active==true?'dropdown-item active':'dropdown-item'"
+                                   (click)="selectFilter(i)">{{status.name}}</a></li>
+
+                    </ul>
+               </div>
+          </div>
+          <div class="cotnainer-table">
+               <table>
+                    <thead>
+                         <th *ngFor="let header of headers" [style]>{{header.nameHebraw}}</th>
+                    </thead>
+                    <tbody>
+                         <ng-container *ngFor="let car of carList">
+                              <tr>
+                                   <ng-container *ngFor="let header of headers">
+                                        <td *ngIf="header.nameEnglish!='actions'">{{car[header.nameEnglish]}}</td>
+                                        <td *ngIf="header.nameEnglish=='actions'">
+                                             <div
+                                                  style="display: flex;gap: 5px; flex-wrap: wrap;align-items:center;justify-content: center;">
+                                                  <button data-bs-target="#EditCarModel" data-bs-toggle="modal"
+                                                       mat-raised-button style="height: 40px;"
+                                                       (click)="getSpecificCar(car['id'])">
+                                                       <div
+                                                            style="display: flex;gap: 3px;flex-direction: column;position: relative;">
+                                                            <i class="material-icons"
+                                                                 style="font-size: 25px;position: relative;top: 5px;">edit</i>
+                                                            <span
+                                                                 style="color: #8a8a8a;font-size: 0.8rem;position: relative;bottom:2px;">Edit</span>
+                                                       </div>
+                                                  </button>
+                                                  <button mat-raised-button style="height: 40px; "
+                                                       (click)="removeCar(car['id'])">
+                                                       <div
+                                                            style="display: flex;gap: 3px;flex-direction: column;position: relative;">
+                                                            <i class="material-icons"
+                                                                 style="font-size: 25px;position: relative;top: 5px;">delete</i>
+                                                            <span
+                                                                 style="color: #8a8a8a;font-size: 0.8rem;position: relative;bottom:2px;">delete</span>
+                                                       </div>
+                                                  </button>
+                                             </div>
+                                        </td>
+                                   </ng-container>
+                              </tr>
+                         </ng-container>
+                    </tbody>
+               </table>
+          </div>
+     </div>
+</div>

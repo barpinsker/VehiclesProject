@@ -1,35 +1,33 @@
-# שלב 1: בניית היישום
+# Step 1: Building the application.
 FROM node:22 AS builder
 
 WORKDIR /app
 
-# העתקת קבצי התצורה (package.json ו- package-lock.json)
+# Copying configuration files (package.json and package-lock.json).
 COPY package*.json ./
 
-# התקנת התלויות
+# Installing dependencies.
 RUN npm install
 
-# העתקת קבצי הקוד
+# Copying the source code files.
 COPY . .
 
-# בניית היישום
+# Building the application.
 RUN npm run build
 
-# יצירת מיגרציה
-# RUN npx typeorm migration:generate -d dist/data-source.js src/migrations/vehicleMiration
 
-# שלב 2: יצירת קונטיינר להרצה
+# Step 2: Creating a container for running.
 FROM node:18
 
 WORKDIR /app
 
-# העתקת קבצי ה-build מקונטיינר הבנייה
+# Copying the build files from the build container.
 COPY --from=builder /app/dist ./dist
 
-# העתקת קבצי התצורה מחדש (כדי לוודא שהם קיימים בהרצה)
+# Copying the configuration files again (to ensure they are present during runtime).
 COPY package*.json ./
 
-# התקנת תלויות עבור פרודקשן בלבד
+# Installing dependencies for production only.
 RUN npm install --only=prod
 
 # CMD ["node", "dist/main.js"]
