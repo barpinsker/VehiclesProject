@@ -15,6 +15,9 @@ COPY . .
 # בניית היישום
 RUN npm run build
 
+# יצירת מיגרציה
+# RUN npx typeorm migration:generate -d dist/data-source.js src/migrations/vehicleMiration
+
 # שלב 2: יצירת קונטיינר להרצה
 FROM node:18
 
@@ -29,4 +32,6 @@ COPY package*.json ./
 # התקנת תלויות עבור פרודקשן בלבד
 RUN npm install --only=prod
 
-CMD ["node", "dist/main.js"]
+# CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx typeorm migration:run -d dist/data-source.js && node dist/main.js"]
+
