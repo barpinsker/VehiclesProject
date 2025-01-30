@@ -1,0 +1,18 @@
+# שלב 1: בניית האפליקציה
+FROM node:22 AS builder
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build --prod
+
+# שלב 2: יצירת קונטיינר עבור ההרצה
+FROM nginx:alpine
+
+COPY --from=builder /app/dist/forntend /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

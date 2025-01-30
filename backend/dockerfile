@@ -1,0 +1,32 @@
+# שלב 1: בניית היישום
+FROM node:22 AS builder
+
+WORKDIR /app
+
+# העתקת קבצי התצורה (package.json ו- package-lock.json)
+COPY package*.json ./
+
+# התקנת התלויות
+RUN npm install
+
+# העתקת קבצי הקוד
+COPY . .
+
+# בניית היישום
+RUN npm run build
+
+# שלב 2: יצירת קונטיינר להרצה
+FROM node:18
+
+WORKDIR /app
+
+# העתקת קבצי ה-build מקונטיינר הבנייה
+COPY --from=builder /app/dist ./dist
+
+# העתקת קבצי התצורה מחדש (כדי לוודא שהם קיימים בהרצה)
+COPY package*.json ./
+
+# התקנת תלויות עבור פרודקשן בלבד
+RUN npm install --only=prod
+
+CMD ["node", "dist/main.js"]
