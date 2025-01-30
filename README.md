@@ -43,6 +43,11 @@ Follow the steps below:
 - run backend - " npm run start:dev" 
 - run frontend - npm start
 - swagger ip - "localhost:3000/api"
-## Additional Notes
-Unfortunately, I encountered an error where the database could not be connected to via Docker, so the Docker setup is not available.
+
+**Added Docker configuration:** 
+To build and run the application, follow these steps:
+1. Navigate to the frontend directory: `cd frontend`
+2. Build the Angular app: `ng build`
+3. Navigate back to the root directory: `cd ..`
+4. Build and start the Docker containers: `docker-compose up --build`
 
