@@ -1,0 +1,35 @@
+# Step 1: Building the application.
+FROM node:22 AS builder
+
+WORKDIR /app
+
+# Copying configuration files (package.json and package-lock.json).
+COPY package*.json ./
+
+# Installing dependencies.
+RUN npm install
+
+# Copying the source code files.
+COPY . .
+
+# Building the application.
+RUN npm run build
+
+
+# Step 2: Creating a container for running.
+FROM node:18
+
+WORKDIR /app
+
+# Copying the build files from the build container.
+COPY --from=builder /app/dist ./dist
+
+# Copying the configuration files again (to ensure they are present during runtime).
+COPY package*.json ./
+
+# Installing dependencies for production only.
+RUN npm install --only=prod
+
+# CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx typeorm migration:run -d dist/data-source.js && node dist/main.js"]
+
