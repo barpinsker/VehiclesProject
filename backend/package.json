@@ -18,13 +18,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/jest/bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/config/typeorm.config-migrations.ts",
-    
     "typeorm":"npm run build && npx typeorm -d dist/data-sorce.js",
     "migration:create": "npm run typeorm -- migration:create -d src/database/migrations -n",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
-    "migration:generate":"npm run typeorm -- migration:generate"
-
+    "migration:generate": "npm run typeorm -- migration:generate"
   },
   "engines": {
     "npm": ">=10.0.0",
@@ -34,6 +32,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.0.3",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",

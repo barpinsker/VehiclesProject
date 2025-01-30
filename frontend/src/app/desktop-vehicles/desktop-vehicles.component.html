@@ -30,10 +30,10 @@
                                              type="{{header.type}}" id="{{header.nameEnglish}}" required
                                              autocomplete="off" [(ngModel)]="newCar[header.nameEnglish]">
 
-                                        <input [disabled]="header.nameEnglish=='id'" maxlength="10"
+                                        <input [disabled]="header.nameEnglish=='id'" maxlength="8"
                                              *ngIf="header.nameEnglish=='licensePlate'" class="form-control" type="text"
                                              id="{{header.nameEnglish}}" required autocomplete="off"
-                                             (input)="transform(newCar[header.nameEnglish],'new')"
+                                            
                                              [(ngModel)]="newCar[header.nameEnglish]">
                                    </ng-container>
                                    <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
@@ -75,10 +75,10 @@
                                                   value="{{value.value}}">{{value.value}}</option>
                                         </ng-container>
                                    </select>
-                                   <input [disabled]="header.nameEnglish=='id'" *ngIf="header.type=='text'"
+                                   <input [disabled]="header.nameEnglish=='id'" maxlength="8" *ngIf="header.type=='text'"
                                         class="form-control" type="{{header.type}}" id="{{header.nameEnglish}}" required
                                         autocomplete="off" [(ngModel)]="editRowCar[header.nameEnglish]"
-                                        (input)="transform(editRowCar[header.nameEnglish],'old')">
+                                      >
                                    <label class="labelSize" for="{{header.nameEnglish}}" title="{{header.nameHebraw}}"
                                         data-title=""></label>
                               </div>
@@ -102,7 +102,7 @@
      </div>
      <div class="container">
           <div class="container-buttons">
-               <button mat-raised-button data-bs-target="#addNewCarModel" data-bs-toggle="modal" (click)="getNewId()">
+               <button mat-raised-button data-bs-target="#addNewCarModel" data-bs-toggle="modal" >
                     <div style="display: flex;gap: 0px;flex-direction: column;">
                          <span class="material-symbols-outlined">
                               add

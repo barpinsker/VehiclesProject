@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column,CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
 
-@Entity('vehicle')
+@Entity('vehicleDB')
 export class Vehicle {
   @PrimaryGeneratedColumn()
   id: number;  // מזהה יחודי
@@ -17,10 +17,10 @@ export class Vehicle {
   @Column({ type: 'varchar', length: 50 })
   status: string;  // סטטוס הרכב
 
-  @CreateDateColumn()
+  @Column({ type: 'varchar', length: 50 })
   createdAt: string;  // תאריך יצירה
 
-  @UpdateDateColumn()
+  @Column({ type: 'varchar', length: 50 })
   updatedAt: string;  // תאריך עדכון אחרון
 }
 

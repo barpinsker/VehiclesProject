@@ -1,11 +1,9 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber } from 'class-validator';
 
 export class CreateVehicleDto {
-    @IsString()
-    @IsNotEmpty()
-    id: number;
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   licensePlate: string;
 
   @IsString()
@@ -19,4 +17,5 @@ export class CreateVehicleDto {
   @IsEnum(['active', 'inactive'])
   @IsOptional()
   status?: string;
+
 }

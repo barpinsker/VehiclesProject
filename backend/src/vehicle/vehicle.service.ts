@@ -11,35 +11,6 @@ import { validate } from 'class-validator';
 export class VehicleService {
   constructor(@InjectRepository(Vehicle)
   private vehicleRepository: Repository<Vehicle>){}
-  private readonly cars = [
-    {
-      id: '1',
-      licensePlate: '123-45-678',
-      manufacturer: 'Toyota',
-      model: 'Corolla',
-      status: 'active',
-      createdAt: '2023-01-15',
-      updatedAt: '2023-03-10',
-    },
-    {
-      id: '2',
-      licensePlate: '234-56-789',
-      manufacturer: 'Honda',
-      model: 'Civic',
-      status: 'inactive',
-      createdAt: '2022-12-01',
-      updatedAt: '2023-02-20',
-    },
-    {
-      id: '3',
-      licensePlate: '345-67-890',
-      manufacturer: 'Ford',
-      model: 'Mustang',
-      status: 'active',
-      createdAt: '2023-03-01',
-      updatedAt: '2023-03-15',
-    },
-  ];
   detailsCarUpdate: any = ['licensePlate', 'manufacturer', 'model', 'status'];
   // Request all vehicles without the need for a filter
   getAllCars() {
@@ -65,7 +36,6 @@ export class VehicleService {
   async createCar(car: any) {
     
             // הנתונים תקינים
-            car.updatedAt = new Date();
             const newCar = this.vehicleRepository.create({
             licensePlate: car.licensePlate,
             manufacturer: car.manufacturer,
@@ -79,8 +49,7 @@ export class VehicleService {
 }
   // Update an existing vehicle, and if it doesn't exist, throw an error
   async updateCar(car: any, id: number) {
-   
-    car.updatedAt = new Date();
+    console.log(car)
     const vehicle = await this.vehicleRepository.findOne({ where: { id } });
      // udpate data
      Object.assign(vehicle, car);
